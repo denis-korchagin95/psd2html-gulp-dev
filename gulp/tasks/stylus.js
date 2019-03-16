@@ -15,7 +15,9 @@ module.exports = function(options) {
 					};
 				})
 			}))
+			.pipe($.if($._config.isDevelopment, $.sourcemaps.init()))
 			.pipe($.stylus(stylusOptions))
+			.pipe($.if($._config.isDevelopment, $.sourcemaps.write()))
 			.pipe(gulp.dest(options.dest));
 	};
 };
