@@ -1,8 +1,8 @@
 var gulp = require('gulp');
 var pug = require('gulp-pug');
-var connect = require('gulp-connect');
 var stylus = require('gulp-stylus');
 var del = require('del');
+var browserSync = require('browser-sync').create();
 
 
 gulp.task('clean', function() {
@@ -10,21 +10,21 @@ gulp.task('clean', function() {
 });
 
 
-gulp.task('connect', function(callback) {
-	connect.server({
-		port: 1337,
-		livereload: true,
-		root: './dist'
+gulp.task('serve', function(callback) {
+	browserSync.init({
+		server: 'dist'
 	});
-	callback();
+	
+	browserSync
+		.watch('dist/**/*.*')
+		.on('changed', browserSync.reload);
 });
 
 
 gulp.task('stylus', function() {
 	return gulp.src('src/stylus/*.styl')
 		.pipe(stylus())
-		.pipe(gulp.dest('dist/css'))
-		.pipe(connect.reload());
+		.pipe(gulp.dest('dist/css'));
 });
 
 
@@ -33,8 +33,7 @@ gulp.task('pug', function() {
 		.pipe(pug({
 			pretty: true
 		}))
-		.pipe(gulp.dest('dist'))
-		.pipe(connect.reload());
+		.pipe(gulp.dest('dist'));
 });
 
 
@@ -52,7 +51,10 @@ gulp.task('watch', function(callback) {
 });
 
 
-gulp.task('default', gulp.series(
-	'clean', 'pug', 'stylus', 'images',
-	gulp.parallel('connect', 'watch')
-));
+gulp.task('build', gulp.series('clean', 'stylus', 'images', 'pug'));
+
+
+gulp.task('dev', gulp.series('build', gulp.parallel('serve', 'watch')));
+
+
+gulp.task('default', gulp.series('dev'));
