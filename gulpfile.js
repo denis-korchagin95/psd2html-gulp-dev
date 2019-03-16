@@ -1,45 +1,39 @@
+'use strict';
+
 var gulp = require('gulp');
-var pug = require('gulp-pug');
-var stylus = require('gulp-stylus');
-var del = require('del');
-var browserSync = require('browser-sync').create();
+var gulpConfig = require('./gulp/config');
 
 
-gulp.task('clean', function() {
-	return del('dist');
-});
-
-
-gulp.task('serve', function(callback) {
-	browserSync.init({
-		server: 'dist'
+function deferredTaskRequire(taskName, taskPath, taskOptions) {
+	if( taskOptions == null )
+		taskOptions = {};
+	gulp.task(taskName, function(callback) {
+		var task = require(taskPath).call(this, taskOptions);
+		
+		return task(callback);
 	});
-	
-	browserSync
-		.watch('dist/**/*.*')
-		.on('change', browserSync.reload);
+}
+
+
+deferredTaskRequire('serve', './gulp/tasks/serve.js');
+
+deferredTaskRequire('clean', './gulp/tasks/clean.js', {
+	folders: ['dist']
 });
 
-
-gulp.task('stylus', function() {
-	return gulp.src('src/stylus/*.styl')
-		.pipe(stylus())
-		.pipe(gulp.dest('dist/css'));
+deferredTaskRequire('stylus', './gulp/tasks/stylus.js', {
+	src: ['src/stylus/*.styl'],
+	dest: 'dist/css'
 });
 
-
-gulp.task('pug', function() {
-	return gulp.src('src/pug/*.pug')
-		.pipe(pug({
-			pretty: true
-		}))
-		.pipe(gulp.dest('dist'));
+deferredTaskRequire('pug', './gulp/tasks/pug.js', {
+	src: 'src/pug/*.pug',
+	dest: 'dist'
 });
 
-
-gulp.task('images', function() {
-	return gulp.src('src/images/**/*.*')
-		.pipe(gulp.dest('dist/images'));
+deferredTaskRequire('images', './gulp/tasks/images.js', {
+	src: 'src/images/**/*.*',
+	dest: 'dist/images'
 });
 
 
