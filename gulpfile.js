@@ -23,12 +23,25 @@ deferredTaskRequire('clean', './gulp/tasks/clean.js', {
 
 deferredTaskRequire('stylus', './gulp/tasks/stylus.js', {
 	src: ['src/stylus/*.styl'],
-	dest: 'dist/css'
+	dest: 'dist/css',
+	autoprefixerOptions: {
+		browsers: ['last 4 version']
+	},
+	revReplaceQueue: [
+		gulpConfig.manifestDir + '/images.json',
+		gulpConfig.manifestDir + '/fonts.json'
+	],
+	manifestName: 'css.json'
 });
 
 deferredTaskRequire('pug', './gulp/tasks/pug.js', {
 	src: 'src/pug/*.pug',
-	dest: 'dist'
+	dest: 'dist',
+	revReplaceQueue: [
+		gulpConfig.manifestDir + '/css.json',
+		gulpConfig.manifestDir + '/js-vendor.json',
+		gulpConfig.manifestDir + '/images.json'
+	]
 });
 
 deferredTaskRequire('images', './gulp/tasks/images.js', {
