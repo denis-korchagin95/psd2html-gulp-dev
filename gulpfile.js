@@ -40,7 +40,8 @@ deferredTaskRequire('pug', './gulp/tasks/pug.js', {
 	revReplaceQueue: [
 		gulpConfig.manifestDir + '/css.json',
 		gulpConfig.manifestDir + '/js-vendor.json',
-		gulpConfig.manifestDir + '/images.json'
+		gulpConfig.manifestDir + '/images.json',
+		gulpConfig.manifestDir + '/webpack.json'
 	]
 });
 
@@ -65,6 +66,11 @@ deferredTaskRequire('js:vendor', './gulp/tasks/js-vendor.js', {
 })
 
 
+deferredTaskRequire('webpack', './gulp/tasks/webpack.js', {
+	manifestName: 'webpack.json'
+});
+
+
 gulp.task('watch', function(callback) {
 	gulp.watch('src/pug/**/*.pug', gulp.series('pug'));
 	gulp.watch('src/stylus/**/*.styl', gulp.series('stylus'));
@@ -78,7 +84,7 @@ gulp.task('watch', function(callback) {
 gulp.task('assets', gulp.parallel('js:vendor', 'images', 'fonts'));
 
 
-gulp.task('build', gulp.series('clean', 'assets', 'stylus', 'pug'));
+gulp.task('build', gulp.series('clean', 'assets', 'stylus', 'webpack', 'pug'));
 
 
 gulp.task('dev', gulp.series('build', gulp.parallel('serve', 'watch')));

@@ -36,7 +36,7 @@ module.exports = function(gulp, config, options) {
 			.pipe($.if(!config.isDevelopment && config.isNeedApplyReplaceRev, $.streamCombiner2.obj.apply($.streamCombiner2.obj, revReplaceQueue)))
 			.pipe(gulp.dest(options.dest))
 			.pipe($.if(!config.isDevelopment && config.isGenerateRev, $.streamCombiner2.obj(
-				$.rev.manifest(options.manifestPath),
+				$.rev.manifest(options.manifestName),
 				gulp.dest(config.manifestDir)
 			)))
 	};
