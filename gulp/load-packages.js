@@ -17,9 +17,7 @@ function loadPackage(name) {
 
 Object.keys(gulpConfig.extraPackages).forEach(function(element) {
 	if( plugins[element] == null )
-		plugins[element] = function() {
-			return loadPackage(extraPackages[element]).call(this, arguments);
-		};
+		plugins[element] = loadPackage(extraPackages[element]);
 });
 
 plugins._config = gulpConfig;

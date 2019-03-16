@@ -2,7 +2,7 @@
 
 var browserSync = require('browser-sync').create();
 
-module.exports = function(options) {
+module.exports = function(gulp, config, options) {
 	return function(callback) {
 		browserSync.init({
 			server: 'dist'

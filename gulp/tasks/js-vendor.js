@@ -11,6 +11,6 @@ module.exports = function(gulp, config, options) {
 			.pipe($.if(!config.isDevelopment && config.isGenerateRev, $.streamCombiner2.obj(
 				$.rev.manifest(options.manifestName),
 				gulp.dest(config.manifestDir)
-			)));
+			)))
 	};
 };

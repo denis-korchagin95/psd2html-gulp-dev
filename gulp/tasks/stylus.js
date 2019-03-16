@@ -1,9 +1,8 @@
 'use strict';
 
 var $ = require('../load-packages');
-var gulp = require('gulp');
 
-module.exports = function(options) {
+module.exports = function(gulp, config, options) {
 	var stylusOptions = $.lodashGet(options, 'stylusOptions', {});
 	return function(callback) {
 		return gulp.src(options.src)
@@ -15,9 +14,9 @@ module.exports = function(options) {
 					};
 				})
 			}))
-			.pipe($.if($._config.isDevelopment, $.sourcemaps.init()))
+			.pipe($.if(config.isDevelopment, $.sourcemaps.init()))
 			.pipe($.stylus(stylusOptions))
-			.pipe($.if($._config.isDevelopment, $.sourcemaps.write()))
+			.pipe($.if(config.isDevelopment, $.sourcemaps.write()))
 			.pipe(gulp.dest(options.dest));
 	};
 };
