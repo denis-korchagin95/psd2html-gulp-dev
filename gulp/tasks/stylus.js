@@ -7,6 +7,14 @@ module.exports = function(options) {
 	var stylusOptions = $.lodashGet(options, 'stylusOptions', {});
 	return function(callback) {
 		return gulp.src(options.src)
+			.pipe($.plumber({
+				errorHandler: $.notify.onError(function(error) {
+					return {
+						title: 'Stylus',
+						message: error.message
+					};
+				})
+			}))
 			.pipe($.stylus(stylusOptions))
 			.pipe(gulp.dest(options.dest));
 	};
